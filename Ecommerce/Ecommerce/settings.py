@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'home',
     'products',
     'rest_framework',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +70,12 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTJHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 
