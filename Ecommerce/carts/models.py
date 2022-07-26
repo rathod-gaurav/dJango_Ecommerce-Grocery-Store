@@ -17,10 +17,21 @@ class CartItems(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.FloatField(default=0)
-    total_items = models.IntegerField(default=0)
     quantity = models.IntegerField(default=1)
 
+    def __str__(self):
+        return str(self.user.username) + " " + str(self.product.product_name)
 
-@receiver(post_save,sender=CartItems)
+
+@receiver(pre_save,sender=CartItems)
 def correct_price(sender,**kwargs):
-    print("I got called")
+    cart_items = kwargs['instance']
+    price_of_product = Product.objects.get(id=cart_items.product.id)
+    cart_items.price = cart_items.quantity * float(price_of_product.price)
+    
+    # total_cart_items = CartItems.objects.filter(user=cart_items.user)
+    # cart_items.total_items = len(total_cart_items)
+
+    cart = Cart.objects.get(id=cart_items.cart.id)
+    cart.total_price = cart.total_price + cart_items.price
+    cart.save()
