@@ -23,11 +23,12 @@ class CartItems(models.Model):
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
-        return str(self.user.username) + " " + str(self.product.product_name)
+        return str(self.user.username) + " " + str(self.product.product_name) + " " + str(self.price)
 
 
 @receiver(pre_save,sender=CartItems)
 def correct_price(sender,**kwargs):
+    # print("I got called")
     cart_items = kwargs['instance']
     price_of_product = Product.objects.get(id=cart_items.product.id)
     cart_items.price = cart_items.quantity * float(price_of_product.price)
