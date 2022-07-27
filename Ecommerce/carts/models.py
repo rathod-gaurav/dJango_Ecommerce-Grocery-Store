@@ -11,6 +11,9 @@ class Cart(models.Model):
     ordered = models.BooleanField(default=False)
     total_price = models.FloatField(default=0)
 
+    def __str__(self):
+        return str(self.user.username) + " - cart - " + str(self.total_price)
+
 
 class CartItems(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
