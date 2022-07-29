@@ -39,3 +39,19 @@ def correct_price(sender,**kwargs):
     cart = Cart.objects.get(id=cart_items.cart.id)
     cart.total_price = cart.total_price + cart_items.price
     cart.save()
+
+
+class Orders(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    amount = models.FloatField(default=0)
+    is_paid = models.BooleanField(default=False)
+    #for payment gateway
+    order_id = models.CharField(max_length=100, blank=True)
+    payment_id = models.CharField(max_length=100, blank=True)
+    payment_signature = models.CharField(max_length=100, blank=True)
+
+class OrderedItems(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE)
+    
